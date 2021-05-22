@@ -8,7 +8,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'any-secret-key-you-choose'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 login_manager.init_app(app)
-user_service = UserService()
 db.init_app(app)
 
 
@@ -25,7 +24,7 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        success = user_service.create_user(request.form)
+        success = User(request.form).safe_new_user_in_db()
         return redirect(url_for("secrets.html")) if success else redirect(url_for("home"))
     return render_template("register.html")
 
