@@ -25,7 +25,7 @@ class LoginHandler:
     def check_user_already_signed_in(self, user_email):
         already_exists = User.query.filter_by(email=user_email).first()
         if already_exists:
-            print("Sorry you are already signed in")
+            print("Sorry you are already signed in. Try login in!")
             return True
         else:
             return False
