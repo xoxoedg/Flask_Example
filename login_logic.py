@@ -23,11 +23,12 @@ class PasswordHashing:
 class LoginHandler:
 
     def check_user_already_signed_in(self, user_email):
-        new_user = User.query.filter_by(email=user_email).first()
-        if new_user:
-            return print("Sorry you are already signed in")
+        already_exists = User.query.filter_by(email=user_email).first()
+        if already_exists:
+            print("Sorry you are already signed in")
+            return True
         else:
-            pass
+            return False
 
     def log_out_user(self):
         return logout_user()

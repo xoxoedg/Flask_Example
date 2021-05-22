@@ -1,15 +1,14 @@
 from flask import Flask, redirect, request, render_template, url_for
 from login_logic import login_manager, LoginHandler, PasswordHashing
 from db_Model import User, db
-
-
+from user_service import UserService
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'any-secret-key-you-choose'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 login_manager.init_app(app)
-login_handler = LoginHandler()
+user_service = UserService()
 db.init_app(app)
 
 
@@ -17,22 +16,18 @@ db.init_app(app)
 def home():
     return render_template("index.html")
 
+
 @app.route("/login")
 def login():
     return render_template("")
 
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
-     password_handler = PasswordHashing()
-
-     if request.method == "POST":
-         new_user = User()
-         password_handler.hash_password(new_user.password)
-         print(new_user.username)
-         login_handler.check_user_already_signed_in(user_email=new_user.email)
-         return redirect(url_for("home"))
-     return render_template("register.html")
-
+    if request.method == "POST":
+        success = user_service.create_user(request.form)
+        return redirect(url_for("secrets.html")) if success else redirect(url_for("home"))
+    return render_template("register.html")
 
 
 @app.route("/logout")
