@@ -16,18 +16,18 @@ db.init_app(app)
 def home():
     return render_template("index.html")
 
-
 @app.route("/login")
 def login():
     return render_template("")
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        print("Wuff")
         success = user_service.create_user(request.form)
         return redirect(url_for("secrets.html")) if success else redirect(url_for("home"))
     return render_template("register.html")
+
 
 
 @app.route("/logout")
